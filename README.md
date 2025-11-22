@@ -62,12 +62,14 @@ How to use tha package.
 ```ts
 import Cache from "@bejibun/cache";
 
-await Cache.remember("key", () => {}); // any
+await Cache.remember("key", () => {}, 60 /* seconds */); // any
 await Cache.has("key"); // boolean
 await Cache.get("key"); // any
-await Cache.add("key", "Hello world"); // boolean
-await Cache.put("key", "Lorem ipsum"); // boolean
+await Cache.add("key", "Hello world", 60 /* seconds */); // boolean
+await Cache.put("key", "Lorem ipsum", 60 /* seconds */); // boolean
 await Cache.forget("key"); // void
+await Cache.increment("key"); // number
+await Cache.decrement("key"); // number
 ```
 
 ## Contributors

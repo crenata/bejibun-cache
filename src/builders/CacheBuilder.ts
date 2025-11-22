@@ -32,7 +32,7 @@ export default class CacheBuilder {
         return `${this.prefix}/${key}`;
     }
 
-    public async remember(key: string, callback: Function): Promise<any> {
+    public async remember(key: string, callback: Function, ttl?: number): Promise<any> {
         let data: any;
 
         switch (this.config.connection) {
@@ -41,7 +41,7 @@ export default class CacheBuilder {
 
                 if (isEmpty(data)) {
                     data = callback();
-                    await Redis.set(this.key(key), data);
+                    await Redis.set(this.key(key), data, ttl);
                 }
                 break;
             default:
@@ -82,7 +82,7 @@ export default class CacheBuilder {
         return data;
     }
 
-    public async add(key: string, value: any): Promise<boolean> {
+    public async add(key: string, value: any, ttl?: number): Promise<boolean> {
         let status: boolean = true;
         let data: any;
 
@@ -99,7 +99,7 @@ export default class CacheBuilder {
             if (isEmpty(data)) {
                 switch (this.config.connection) {
                     case "redis":
-                        await Redis.set(this.key(key), value);
+                        await Redis.set(this.key(key), value, ttl);
                         break;
                     default:
                         break;
@@ -116,13 +116,13 @@ export default class CacheBuilder {
         return status;
     }
 
-    public async put(key: string, value: any): Promise<boolean> {
+    public async put(key: string, value: any, ttl?: number): Promise<boolean> {
         let status: boolean = true;
 
         try {
             switch (this.config.connection) {
                 case "redis":
-                    await Redis.set(this.key(key), value);
+                    await Redis.set(this.key(key), value, ttl);
                     break;
                 default:
                     break;
@@ -143,5 +143,51 @@ export default class CacheBuilder {
             default:
                 break;
         }
+    }
+
+    public async increment(key: string): Promise<number> {
+        let data: number;
+
+        switch (this.config.connection) {
+            case "redis":
+                data = Number(await Redis.get(this.key(key)));
+
+                if (isEmpty(data)) {
+                    data = 1;
+                    await Redis.set(this.key(key), data);
+                } else {
+                    data++;
+                    await Redis.set(this.key(key), data);
+                }
+                break;
+            default:
+                data = 0;
+                break;
+        }
+
+        return data;
+    }
+
+    public async decrement(key: string): Promise<number> {
+        let data: number;
+
+        switch (this.config.connection) {
+            case "redis":
+                data = Number(await Redis.get(this.key(key)));
+
+                if (isEmpty(data)) {
+                    data = -1;
+                    await Redis.set(this.key(key), data);
+                } else {
+                    data--;
+                    await Redis.set(this.key(key), data);
+                }
+                break;
+            default:
+                data = 0;
+                break;
+        }
+
+        return data;
     }
 }

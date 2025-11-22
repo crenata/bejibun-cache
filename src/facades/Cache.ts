@@ -1,8 +1,8 @@
 import CacheBuilder from "@/builders/CacheBuilder";
 
 export default class Cache {
-    public static async remember(key: string, callback: Function): Promise<any> {
-        return new CacheBuilder().remember(key, callback);
+    public static async remember(key: string, callback: Function, ttl?: number): Promise<any> {
+        return new CacheBuilder().remember(key, callback, ttl);
     }
 
     public static async has(key: string): Promise<boolean> {
@@ -13,15 +13,23 @@ export default class Cache {
         return new CacheBuilder().get(key);
     }
 
-    public static async add(key: string, value: string): Promise<boolean> {
-        return new CacheBuilder().add(key, value);
+    public static async add(key: string, value: string, ttl?: number): Promise<boolean> {
+        return new CacheBuilder().add(key, value, ttl);
     }
 
-    public static async put(key: string, value: string): Promise<boolean> {
-        return new CacheBuilder().put(key, value);
+    public static async put(key: string, value: string, ttl?: number): Promise<boolean> {
+        return new CacheBuilder().put(key, value, ttl);
     }
 
     public static async forget(key: string): Promise<void> {
         return new CacheBuilder().forget(key);
+    }
+
+    public static async increment(key: string): Promise<number> {
+        return new CacheBuilder().increment(key);
+    }
+
+    public static async decrement(key: string): Promise<number> {
+        return new CacheBuilder().decrement(key);
     }
 }
