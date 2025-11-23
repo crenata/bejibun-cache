@@ -18,10 +18,10 @@ export default class Cache {
     static async forget(key) {
         return new CacheBuilder().forget(key);
     }
-    static async increment(key) {
-        return new CacheBuilder().increment(key);
+    static async increment(key, ttl) {
+        return new CacheBuilder().increment(key, ttl);
     }
-    static async decrement(key) {
-        return new CacheBuilder().decrement(key);
+    static async decrement(key, ttl) {
+        return new CacheBuilder().decrement(key, ttl);
     }
 }

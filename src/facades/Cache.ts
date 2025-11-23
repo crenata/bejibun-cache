@@ -13,11 +13,11 @@ export default class Cache {
         return new CacheBuilder().get(key);
     }
 
-    public static async add(key: string, value: string, ttl?: number): Promise<boolean> {
+    public static async add(key: string, value: any, ttl?: number): Promise<boolean> {
         return new CacheBuilder().add(key, value, ttl);
     }
 
-    public static async put(key: string, value: string, ttl?: number): Promise<boolean> {
+    public static async put(key: string, value: any, ttl?: number): Promise<boolean> {
         return new CacheBuilder().put(key, value, ttl);
     }
 
@@ -25,11 +25,11 @@ export default class Cache {
         return new CacheBuilder().forget(key);
     }
 
-    public static async increment(key: string): Promise<number> {
-        return new CacheBuilder().increment(key);
+    public static async increment(key: string, ttl?: number): Promise<number> {
+        return new CacheBuilder().increment(key, ttl);
     }
 
-    public static async decrement(key: string): Promise<number> {
-        return new CacheBuilder().decrement(key);
+    public static async decrement(key: string, ttl?: number): Promise<number> {
+        return new CacheBuilder().decrement(key, ttl);
     }
 }

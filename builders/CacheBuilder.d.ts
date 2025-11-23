@@ -10,6 +10,6 @@ export default class CacheBuilder {
     add(key: string, value: any, ttl?: number): Promise<boolean>;
     put(key: string, value: any, ttl?: number): Promise<boolean>;
     forget(key: string): Promise<void>;
-    increment(key: string): Promise<number>;
-    decrement(key: string): Promise<number>;
+    increment(key: string, ttl?: number): Promise<number>;
+    decrement(key: string, ttl?: number): Promise<number>;
 }

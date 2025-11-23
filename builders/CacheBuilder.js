@@ -124,18 +124,18 @@ export default class CacheBuilder {
                 break;
         }
     }
-    async increment(key) {
+    async increment(key, ttl) {
         let data;
         switch (this.config.connection) {
             case "redis":
                 data = Number(await Redis.get(this.key(key)));
                 if (isEmpty(data)) {
                     data = 1;
-                    await Redis.set(this.key(key), data);
+                    await Redis.set(this.key(key), data, ttl);
                 }
                 else {
                     data++;
-                    await Redis.set(this.key(key), data);
+                    await Redis.set(this.key(key), data, ttl);
                 }
                 break;
             default:
@@ -144,18 +144,18 @@ export default class CacheBuilder {
         }
         return data;
     }
-    async decrement(key) {
+    async decrement(key, ttl) {
         let data;
         switch (this.config.connection) {
             case "redis":
                 data = Number(await Redis.get(this.key(key)));
                 if (isEmpty(data)) {
                     data = -1;
-                    await Redis.set(this.key(key), data);
+                    await Redis.set(this.key(key), data, ttl);
                 }
                 else {
                     data--;
-                    await Redis.set(this.key(key), data);
+                    await Redis.set(this.key(key), data, ttl);
                 }
                 break;
             default:

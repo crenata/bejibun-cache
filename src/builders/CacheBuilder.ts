@@ -145,7 +145,7 @@ export default class CacheBuilder {
         }
     }
 
-    public async increment(key: string): Promise<number> {
+    public async increment(key: string, ttl?: number): Promise<number> {
         let data: number;
 
         switch (this.config.connection) {
@@ -154,10 +154,10 @@ export default class CacheBuilder {
 
                 if (isEmpty(data)) {
                     data = 1;
-                    await Redis.set(this.key(key), data);
+                    await Redis.set(this.key(key), data, ttl);
                 } else {
                     data++;
-                    await Redis.set(this.key(key), data);
+                    await Redis.set(this.key(key), data, ttl);
                 }
                 break;
             default:
@@ -168,7 +168,7 @@ export default class CacheBuilder {
         return data;
     }
 
-    public async decrement(key: string): Promise<number> {
+    public async decrement(key: string, ttl?: number): Promise<number> {
         let data: number;
 
         switch (this.config.connection) {
@@ -177,10 +177,10 @@ export default class CacheBuilder {
 
                 if (isEmpty(data)) {
                     data = -1;
-                    await Redis.set(this.key(key), data);
+                    await Redis.set(this.key(key), data, ttl);
                 } else {
                     data--;
-                    await Redis.set(this.key(key), data);
+                    await Redis.set(this.key(key), data, ttl);
                 }
                 break;
             default:
