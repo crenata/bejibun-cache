@@ -4,6 +4,11 @@ export default class CacheBuilder {
     constructor();
     private get config();
     private key;
+    private connection;
+    private filePath;
+    private file;
+    private setFile;
+    private getFile;
     remember(key: string, callback: Function, ttl?: number): Promise<any>;
     has(key: string): Promise<boolean>;
     get(key: string): Promise<any>;

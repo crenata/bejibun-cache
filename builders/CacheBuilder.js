@@ -3,6 +3,7 @@ import Logger from "@bejibun/logger";
 import Redis from "@bejibun/redis";
 import { isEmpty, isNotEmpty } from "@bejibun/utils";
 import fs from "fs";
+import path from "path";
 import CacheConfig from "../config/cache";
 import CacheException from "../exceptions/CacheException";
 export default class CacheBuilder {
@@ -24,11 +25,46 @@ export default class CacheBuilder {
         return this.conf;
     }
     key(key) {
-        return `${this.prefix}/${key}`;
+        const defaultKey = `${this.prefix}-${key.replaceAll("/", "-").replaceAll(" ", "-")}`;
+        return defaultKey;
+        /*if (forceDefault) return defaultKey;
+
+        switch (this.config.connection) {
+            case "local":
+                return `${Luxon.DateTime.now().toUnixInteger()}-${defaultKey}`;
+            default:
+                return defaultKey;
+        }*/
+    }
+    connection() {
+        return this.config.connections[this.config.connection];
+    }
+    filePath(key) {
+        return path.resolve(this.connection().path, `${this.key(key)}.cache`);
+    }
+    file(key) {
+        return Bun.file(this.filePath(key));
+    }
+    async setFile(key, data) {
+        await fs.promises.mkdir(this.connection().path, { recursive: true });
+        return await Bun.write(this.filePath(key), data);
+    }
+    async getFile(key) {
+        const file = this.file(key);
+        if (await file.exists())
+            return await file.text();
+        return null;
     }
     async remember(key, callback, ttl) {
         let data;
         switch (this.config.connection) {
+            case "local":
+                data = await this.getFile(key);
+                if (isEmpty(data)) {
+                    data = callback();
+                    await this.setFile(key, data);
+                }
+                break;
             case "redis":
                 data = await Redis.get(this.key(key));
                 if (isEmpty(data)) {
@@ -45,6 +81,9 @@ export default class CacheBuilder {
     async has(key) {
         let data;
         switch (this.config.connection) {
+            case "local":
+                data = await this.getFile(key);
+                break;
             case "redis":
                 data = await Redis.get(this.key(key));
                 break;
@@ -57,6 +96,9 @@ export default class CacheBuilder {
     async get(key) {
         let data;
         switch (this.config.connection) {
+            case "local":
+                data = await this.getFile(key);
+                break;
             case "redis":
                 data = await Redis.get(this.key(key));
                 break;
@@ -71,6 +113,9 @@ export default class CacheBuilder {
         let data;
         try {
             switch (this.config.connection) {
+                case "local":
+                    data = await this.getFile(key);
+                    break;
                 case "redis":
                     data = await Redis.get(this.key(key));
                     break;
@@ -80,6 +125,9 @@ export default class CacheBuilder {
             }
             if (isEmpty(data)) {
                 switch (this.config.connection) {
+                    case "local":
+                        await this.setFile(key, value);
+                        break;
                     case "redis":
                         await Redis.set(this.key(key), value, ttl);
                         break;
@@ -102,6 +150,9 @@ export default class CacheBuilder {
         let status = true;
         try {
             switch (this.config.connection) {
+                case "local":
+                    await this.setFile(key, value);
+                    break;
                 case "redis":
                     await Redis.set(this.key(key), value, ttl);
                     break;
@@ -117,6 +168,14 @@ export default class CacheBuilder {
     }
     async forget(key) {
         switch (this.config.connection) {
+            case "local":
+                try {
+                    await this.file(key).delete();
+                }
+                catch (error) {
+                    break;
+                }
+                break;
             case "redis":
                 await Redis.del(this.key(key));
                 break;
@@ -127,6 +186,17 @@ export default class CacheBuilder {
     async increment(key, ttl) {
         let data;
         switch (this.config.connection) {
+            case "local":
+                data = Number(await this.getFile(key));
+                if (isEmpty(data)) {
+                    data = 1;
+                    await this.setFile(key, String(data));
+                }
+                else {
+                    data++;
+                    await this.setFile(key, String(data));
+                }
+                break;
             case "redis":
                 data = Number(await Redis.get(this.key(key)));
                 if (isEmpty(data)) {
@@ -147,6 +217,17 @@ export default class CacheBuilder {
     async decrement(key, ttl) {
         let data;
         switch (this.config.connection) {
+            case "local":
+                data = Number(await this.getFile(key));
+                if (isEmpty(data)) {
+                    data = -1;
+                    await this.setFile(key, String(data));
+                }
+                else {
+                    data--;
+                    await this.setFile(key, String(data));
+                }
+                break;
             case "redis":
                 data = Number(await Redis.get(this.key(key)));
                 if (isEmpty(data)) {

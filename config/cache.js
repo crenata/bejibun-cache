@@ -1,6 +1,10 @@
+import App from "@bejibun/app";
 const config = {
-    connection: "redis",
+    connection: "local",
     connections: {
+        local: {
+            path: App.Path.storagePath("cache") // absolute path
+        },
         redis: {
             host: "127.0.0.100",
             port: 6379,
