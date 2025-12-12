@@ -3,9 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [v0.1.13](https://github.com/crenata/bejibun-cache/compare/v0.1.12...v0.1.13) - 2025-12-12
+## [v0.1.14](https://github.com/crenata/bejibun-cache/compare/v0.1.12...v0.1.14) - 2025-12-12
 
 ### 🩹 Fixes
+- Redis connection with Cache own configuration - [#1](https://github.com/crenata/bejibun-core/issues/1)
 
 ### 📖 Changes
 What's New :

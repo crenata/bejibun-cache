@@ -1,6 +1,7 @@
 export default class CacheBuilder {
     protected conf: Record<string, any>;
     protected prefix: string;
+    protected redis: Record<string, Function>;
     constructor();
     private get config();
     private key;

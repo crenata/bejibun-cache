@@ -10,6 +10,7 @@ import CacheException from "../exceptions/CacheException";
 export default class CacheBuilder {
     conf;
     prefix;
+    redis;
     constructor() {
         const configPath = App.Path.configPath("cache.ts");
         let config;
@@ -17,8 +18,20 @@ export default class CacheBuilder {
             config = require(configPath).default;
         else
             config = CacheConfig;
+        const redisConnection = defineValue(config.connections?.redis, {
+            host: "127.0.0.1",
+            port: 6379,
+            password: "",
+            database: 0
+        });
         this.conf = config;
         this.prefix = "bejibun-cache";
+        this.redis = Redis.setClient({
+            host: redisConnection.host,
+            port: redisConnection.port,
+            password: redisConnection.password,
+            database: redisConnection.database
+        });
     }
     get config() {
         if (isEmpty(this.conf))
@@ -26,16 +39,7 @@ export default class CacheBuilder {
         return this.conf;
     }
     key(key) {
-        const defaultKey = `${this.prefix}-${key.replaceAll("/", "-").replaceAll(" ", "-")}`;
-        return defaultKey;
-        /*if (forceDefault) return defaultKey;
-
-        switch (this.config.connection) {
-            case "local":
-                return `${Luxon.DateTime.now().toUnixInteger()}-${defaultKey}`;
-            default:
-                return defaultKey;
-        }*/
+        return `${this.prefix}-${key.replaceAll("/", "-").replaceAll(" ", "-")}`;
     }
     connection() {
         return this.config.connections[this.config.connection];
@@ -86,10 +90,10 @@ export default class CacheBuilder {
                 }
                 break;
             case "redis":
-                data = await Redis.get(this.key(key));
+                data = await this.redis.get(this.key(key));
                 if (isEmpty(data)) {
                     data = callback();
-                    await Redis.set(this.key(key), data, ttl);
+                    await this.redis.set(this.key(key), data, ttl);
                 }
                 break;
             default:
@@ -106,7 +110,7 @@ export default class CacheBuilder {
                 data = raw.data;
                 break;
             case "redis":
-                data = await Redis.get(this.key(key));
+                data = await this.redis.get(this.key(key));
                 break;
             default:
                 data = false;
@@ -122,7 +126,7 @@ export default class CacheBuilder {
                 data = raw.data;
                 break;
             case "redis":
-                data = await Redis.get(this.key(key));
+                data = await this.redis.get(this.key(key));
                 break;
             default:
                 data = false;
@@ -140,7 +144,7 @@ export default class CacheBuilder {
                     data = raw.data;
                     break;
                 case "redis":
-                    data = await Redis.get(this.key(key));
+                    data = await this.redis.get(this.key(key));
                     break;
                 default:
                     data = null;
@@ -152,7 +156,7 @@ export default class CacheBuilder {
                         await this.setFile(key, value, ttl);
                         break;
                     case "redis":
-                        await Redis.set(this.key(key), value, ttl);
+                        await this.redis.set(this.key(key), value, ttl);
                         break;
                     default:
                         break;
@@ -177,7 +181,7 @@ export default class CacheBuilder {
                     await this.setFile(key, value, ttl);
                     break;
                 case "redis":
-                    await Redis.set(this.key(key), value, ttl);
+                    await this.redis.set(this.key(key), value, ttl);
                     break;
                 default:
                     break;
@@ -200,7 +204,7 @@ export default class CacheBuilder {
                 }
                 break;
             case "redis":
-                await Redis.del(this.key(key));
+                await this.redis.del(this.key(key));
                 break;
             default:
                 break;
@@ -222,14 +226,14 @@ export default class CacheBuilder {
                 }
                 break;
             case "redis":
-                data = Number(await Redis.get(this.key(key)));
+                data = Number(await this.redis.get(this.key(key)));
                 if (isEmpty(data)) {
                     data = 1;
-                    await Redis.set(this.key(key), data, ttl);
+                    await this.redis.set(this.key(key), data, ttl);
                 }
                 else {
                     data++;
-                    await Redis.set(this.key(key), data, ttl);
+                    await this.redis.set(this.key(key), data, ttl);
                 }
                 break;
             default:
@@ -254,14 +258,14 @@ export default class CacheBuilder {
                 }
                 break;
             case "redis":
-                data = Number(await Redis.get(this.key(key)));
+                data = Number(await this.redis.get(this.key(key)));
                 if (isEmpty(data)) {
                     data = -1;
-                    await Redis.set(this.key(key), data, ttl);
+                    await this.redis.set(this.key(key), data, ttl);
                 }
                 else {
                     data--;
-                    await Redis.set(this.key(key), data, ttl);
+                    await this.redis.set(this.key(key), data, ttl);
                 }
                 break;
             default:
