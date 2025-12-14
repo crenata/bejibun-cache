@@ -3,6 +3,48 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [v0.1.15](https://github.com/crenata/bejibun-cache/compare/v0.1.14...v0.1.15) - 2025-12-14
+
+### 🩹 Fixes
+
+### 📖 Changes
+What's New :
+- Added `connection()` to override cache connection.
+
+Makes it more flexible by overriding connections at runtime.
+
+- Added `driver` configuration.
+
+#### What's its use?
+The cache connection name is no longer static as before.
+
+e.g. :
+```text
+connections: {
+    local: {
+        path: App.Path.storagePath("cache") // absolute path
+    }
+}
+```
+
+You can now create a connection with any name and specify which driver to use.
+
+```text
+connections: {
+    custom_name: {
+        driver: CacheDriverEnum.Local, // "local", "redis"
+        path: App.Path.storagePath("custom-cache")
+    }
+}
+```
+
+### ❤️Contributors
+- Havea Crenata ([@crenata](https://github.com/crenata))
+
+**Full Changelog**: https://github.com/crenata/bejibun-cache/blob/master/CHANGELOG.md
+
+---
+
 ## [v0.1.14](https://github.com/crenata/bejibun-cache/compare/v0.1.12...v0.1.14) - 2025-12-12
 
 ### 🩹 Fixes

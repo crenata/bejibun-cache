@@ -1,6 +1,6 @@
 {
     "name": "@bejibun/cache",
-    "version": "0.1.14",
+    "version": "0.1.15",
     "author": "Havea Crenata <havea.crenata@gmail.com>",
     "repository": {
         "type": "git",
@@ -38,6 +38,6 @@
         "@bejibun/app": "^0.1.22",
         "@bejibun/logger": "^0.1.22",
         "@bejibun/redis": "^0.1.36",
-        "@bejibun/utils": "^0.1.27"
+        "@bejibun/utils": "^0.1.28"
     }
 }

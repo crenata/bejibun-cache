@@ -3,12 +3,15 @@ import Logger from "@bejibun/logger";
 import Redis from "@bejibun/redis";
 import Luxon from "@bejibun/utils/facades/Luxon";
 import { defineValue, isEmpty, isNotEmpty } from "@bejibun/utils";
+import Enum from "@bejibun/utils/facades/Enum";
 import fs from "fs";
 import path from "path";
 import CacheConfig from "../config/cache";
 import CacheException from "../exceptions/CacheException";
+import CacheDriverEnum from "../enums/CacheDriverEnum";
 export default class CacheBuilder {
     conf;
+    conn;
     prefix;
     redis;
     constructor() {
@@ -38,14 +41,36 @@ export default class CacheBuilder {
             throw new CacheException("There is no config provided.");
         return this.conf;
     }
+    get currentConnection() {
+        return this.config.connections[defineValue(this.conn, this.config.connection)];
+    }
+    get driver() {
+        const driver = defineValue(this.currentConnection?.driver);
+        if (isEmpty(driver))
+            throw new CacheException(`Missing "driver" on cache config.`);
+        if (!Enum.setEnums(CacheDriverEnum).hasValue(driver))
+            throw new CacheException(`Not supported "driver" cache.`);
+        switch (driver) {
+            case "local":
+                if (isEmpty(this.currentConnection?.path))
+                    throw new CacheException(`Missing "path" for "local" cache configuration.`);
+                break;
+            case "redis":
+                if (isEmpty(this.currentConnection?.host))
+                    throw new CacheException(`Missing "host" for "redis" cache configuration.`);
+                if (isEmpty(this.currentConnection?.port))
+                    throw new CacheException(`Missing "port" for "redis" cache configuration.`);
+                break;
+            default:
+                break;
+        }
+        return driver;
+    }
     key(key) {
         return `${this.prefix}-${key.replaceAll("/", "-").replaceAll(" ", "-")}`;
     }
-    connection() {
-        return this.config.connections[this.config.connection];
-    }
     filePath(key) {
-        return path.resolve(this.connection().path, `${this.key(key)}.cache`);
+        return path.resolve(this.currentConnection.path, `${this.key(key)}.cache`);
     }
     file(key) {
         return Bun.file(this.filePath(key));
@@ -54,7 +79,7 @@ export default class CacheBuilder {
         ttl = defineValue(ttl, "");
         if (isNotEmpty(ttl))
             ttl = Luxon.DateTime.now().toUnixInteger() + ttl;
-        await fs.promises.mkdir(this.connection().path, { recursive: true });
+        await fs.promises.mkdir(this.currentConnection.path, { recursive: true });
         return await Bun.write(this.filePath(key), `${ttl}|${data}`);
     }
     async getFile(key) {
@@ -78,9 +103,13 @@ export default class CacheBuilder {
         }
         return metadata;
     }
+    connection(conn) {
+        this.conn = conn;
+        return this;
+    }
     async remember(key, callback, ttl) {
         let data;
-        switch (this.config.connection) {
+        switch (this.driver) {
             case "local":
                 const raw = await this.getFile(key);
                 data = raw.data;
@@ -104,7 +133,7 @@ export default class CacheBuilder {
     }
     async has(key) {
         let data;
-        switch (this.config.connection) {
+        switch (this.driver) {
             case "local":
                 const raw = await this.getFile(key);
                 data = raw.data;
@@ -120,7 +149,7 @@ export default class CacheBuilder {
     }
     async get(key) {
         let data;
-        switch (this.config.connection) {
+        switch (this.driver) {
             case "local":
                 const raw = await this.getFile(key);
                 data = raw.data;
@@ -138,7 +167,7 @@ export default class CacheBuilder {
         let status = true;
         let data;
         try {
-            switch (this.config.connection) {
+            switch (this.driver) {
                 case "local":
                     const raw = await this.getFile(key);
                     data = raw.data;
@@ -151,7 +180,7 @@ export default class CacheBuilder {
                     break;
             }
             if (isEmpty(data)) {
-                switch (this.config.connection) {
+                switch (this.driver) {
                     case "local":
                         await this.setFile(key, value, ttl);
                         break;
@@ -176,7 +205,7 @@ export default class CacheBuilder {
     async put(key, value, ttl) {
         let status = true;
         try {
-            switch (this.config.connection) {
+            switch (this.driver) {
                 case "local":
                     await this.setFile(key, value, ttl);
                     break;
@@ -194,7 +223,7 @@ export default class CacheBuilder {
         return status;
     }
     async forget(key) {
-        switch (this.config.connection) {
+        switch (this.driver) {
             case "local":
                 try {
                     await this.file(key).delete();
@@ -212,7 +241,7 @@ export default class CacheBuilder {
     }
     async increment(key, ttl) {
         let data;
-        switch (this.config.connection) {
+        switch (this.driver) {
             case "local":
                 const raw = await this.getFile(key);
                 data = Number(raw.data);
@@ -244,7 +273,7 @@ export default class CacheBuilder {
     }
     async decrement(key, ttl) {
         let data;
-        switch (this.config.connection) {
+        switch (this.driver) {
             case "local":
                 const raw = await this.getFile(key);
                 data = Number(raw.data);

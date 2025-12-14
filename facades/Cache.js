@@ -1,5 +1,8 @@
 import CacheBuilder from "../builders/CacheBuilder";
 export default class Cache {
+    static connection(connection) {
+        return new CacheBuilder().connection(connection);
+    }
     static async remember(key, callback, ttl) {
         return new CacheBuilder().remember(key, callback, ttl);
     }

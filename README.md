@@ -39,17 +39,20 @@ config/cache.ts
 
 ```ts
 import App from "@bejibun/app";
+import CacheDriverEnum from "@bejibun/utils/enums/CacheDriverEnum";
 
 const config: Record<string, any> = {
     connection: "local",
 
     connections: {
         local: {
+            driver: CacheDriverEnum.Local,
             path: App.Path.storagePath("cache") // absolute path
         },
 
         redis: {
-            host: "127.0.0.100",
+            driver: CacheDriverEnum.Redis,
+            host: "127.0.0.1",
             port: 6379,
             password: "",
             database: 0
@@ -68,6 +71,7 @@ How to use tha package.
 ```ts
 import Cache from "@bejibun/cache";
 
+Cache.connection();
 await Cache.remember("key", () => {}, 60 /* seconds */); // any
 await Cache.has("key"); // boolean
 await Cache.get("key"); // any

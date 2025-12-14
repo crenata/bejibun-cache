@@ -1,6 +1,10 @@
 import CacheBuilder from "@/builders/CacheBuilder";
 
 export default class Cache {
+    public static connection(connection: string): CacheBuilder {
+        return new CacheBuilder().connection(connection);
+    }
+
     public static async remember(key: string, callback: Function, ttl?: number): Promise<any> {
         return new CacheBuilder().remember(key, callback, ttl);
     }
