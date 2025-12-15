@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [v0.1.16](https://github.com/crenata/bejibun-cache/compare/v0.1.15...v0.1.16) - 2025-12-15
+
+### 🩹 Fixes
+- Something went wrong when processing cache file with TTL - [#2](https://github.com/crenata/bejibun-cache/issues/2)
+
+### 📖 Changes
+
+### ❤️Contributors
+- Havea Crenata ([@crenata](https://github.com/crenata))
+
+**Full Changelog**: https://github.com/crenata/bejibun-cache/blob/master/CHANGELOG.md
+
+---
+
 ## [v0.1.15](https://github.com/crenata/bejibun-cache/compare/v0.1.14...v0.1.15) - 2025-12-14
 
 ### 🩹 Fixes

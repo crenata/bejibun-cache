@@ -104,19 +104,24 @@ export default class CacheBuilder {
             ttl: null,
             data: null
         };
-        const file: Bun.BunFile = this.file(key);
 
-        if (await file.exists()) {
-            const raw = await file.text();
-            const [unix, ...rest] = raw.split("|");
-            const ttl = Number(unix);
-            const data = rest.join("|");
+        try {
+            const file: Bun.BunFile = this.file(key);
 
-            if (isEmpty(ttl) || Luxon.DateTime.now().toUnixInteger() <= ttl) metadata = {
-                ttl: defineValue(Number(ttl)),
-                data
-            };
-            else await this.file(key).delete();
+            if (await file.exists()) {
+                const raw = await file.text();
+                const [unix, ...rest] = raw.split("|");
+                const ttl = Number(unix);
+                const data = rest.join("|");
+
+                if (isEmpty(ttl) || Luxon.DateTime.now().toUnixInteger() <= ttl) metadata = {
+                    ttl: defineValue(Number(ttl)),
+                    data
+                };
+                else await file.delete();
+            }
+        } catch (error: any) {
+            Logger.setContext("Cache").error("Something went wrong when processing cache file.").trace(error);
         }
 
         return metadata;
