@@ -94,6 +94,9 @@ export default class CacheBuilder {
         ttl = defineValue(ttl, "");
         if (isNotEmpty(ttl)) ttl = Luxon.DateTime.now().toUnixInteger() + ttl;
 
+        const raw = await this.getFile(key);
+        if (isNotEmpty(raw.ttl)) ttl = Number(raw.ttl);
+
         await fs.promises.mkdir(this.currentConnection.path, {recursive: true});
 
         return await Bun.write(this.filePath(key), `${ttl}|${data}`);
