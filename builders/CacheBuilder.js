@@ -42,7 +42,7 @@ export default class CacheBuilder {
         return this.conf;
     }
     get currentConnection() {
-        return this.config.connections[defineValue(this.conn, this.config.connection)];
+        return this.config.connections[defineValue(this.conn, this.config.default)];
     }
     get driver() {
         const driver = defineValue(this.currentConnection?.driver);

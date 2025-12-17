@@ -2,7 +2,7 @@ import App from "@bejibun/app";
 import CacheDriverEnum from "@/enums/CacheDriverEnum";
 
 const config: Record<string, any> = {
-    connection: "local",
+    default: "local",
 
     connections: {
         local: {

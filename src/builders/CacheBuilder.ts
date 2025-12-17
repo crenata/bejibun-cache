@@ -53,7 +53,7 @@ export default class CacheBuilder {
     }
 
     private get currentConnection(): any {
-        return this.config.connections[defineValue(this.conn, this.config.connection)];
+        return this.config.connections[defineValue(this.conn, this.config.default)];
     }
 
     private get driver(): any {
