@@ -7,8 +7,8 @@ import Enum from "@bejibun/utils/facades/Enum";
 import fs from "fs";
 import path from "path";
 import CacheConfig from "@/config/cache";
-import CacheException from "@/exceptions/CacheException";
 import CacheDriverEnum from "@/enums/CacheDriverEnum";
+import CacheException from "@/exceptions/CacheException";
 
 type CacheFile = {
     ttl: number | null,
@@ -64,10 +64,10 @@ export default class CacheBuilder {
         if (!Enum.setEnums(CacheDriverEnum).hasValue(driver)) throw new CacheException(`Not supported "driver" cache.`);
 
         switch (driver) {
-            case "local":
+            case CacheDriverEnum.Local:
                 if (isEmpty(this.currentConnection?.path)) throw new CacheException(`Missing "path" for "local" cache configuration.`);
                 break;
-            case "redis":
+            case CacheDriverEnum.Redis:
                 if (isEmpty(this.currentConnection?.host)) throw new CacheException(`Missing "host" for "redis" cache configuration.`);
                 if (isEmpty(this.currentConnection?.port)) throw new CacheException(`Missing "port" for "redis" cache configuration.`);
                 break;
