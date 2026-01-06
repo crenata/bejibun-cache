@@ -4,7 +4,7 @@
     "author": "Havea Crenata <havea.crenata@gmail.com>",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/crenata/bejibun-cache.git"
+        "url": "git+https://github.com/Bejibun-Framework/bejibun-cache.git"
     },
     "main": "index.js",
     "module": "index.js",
@@ -13,10 +13,10 @@
         "tsc-alias": "^1.8.16"
     },
     "bugs": {
-        "url": "https://github.com/crenata/bejibun-cache/issues"
+        "url": "https://github.com/Bejibun-Framework/bejibun-cache/issues"
     },
     "description": "Cache for Bejibun Framework",
-    "homepage": "https://github.com/crenata/bejibun-cache#readme",
+    "homepage": "https://github.com/Bejibun-Framework/bejibun-cache#readme",
     "keywords": [
         "bun",
         "bun framework",

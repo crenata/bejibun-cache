@@ -3,21 +3,21 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [v0.1.16](https://github.com/crenata/bejibun-cache/compare/v0.1.15...v0.1.16) - 2025-12-15
+## [v0.1.16](https://github.com/Bejibun-Framework/bejibun-cache/compare/v0.1.15...v0.1.16) - 2025-12-15
 
 ### 🩹 Fixes
-- Something went wrong when processing cache file with TTL - [#2](https://github.com/crenata/bejibun-cache/issues/2)
+- Something went wrong when processing cache file with TTL - [#2](https://github.com/Bejibun-Framework/bejibun-cache/issues/2)
 
 ### 📖 Changes
 
 ### ❤️Contributors
 - Havea Crenata ([@crenata](https://github.com/crenata))
 
-**Full Changelog**: https://github.com/crenata/bejibun-cache/blob/master/CHANGELOG.md
+**Full Changelog**: https://github.com/Bejibun-Framework/bejibun-cache/blob/master/CHANGELOG.md
 
 ---
 
-## [v0.1.15](https://github.com/crenata/bejibun-cache/compare/v0.1.14...v0.1.15) - 2025-12-14
+## [v0.1.15](https://github.com/Bejibun-Framework/bejibun-cache/compare/v0.1.14...v0.1.15) - 2025-12-14
 
 ### 🩹 Fixes
 
@@ -55,14 +55,14 @@ connections: {
 ### ❤️Contributors
 - Havea Crenata ([@crenata](https://github.com/crenata))
 
-**Full Changelog**: https://github.com/crenata/bejibun-cache/blob/master/CHANGELOG.md
+**Full Changelog**: https://github.com/Bejibun-Framework/bejibun-cache/blob/master/CHANGELOG.md
 
 ---
 
-## [v0.1.14](https://github.com/crenata/bejibun-cache/compare/v0.1.12...v0.1.14) - 2025-12-12
+## [v0.1.14](https://github.com/Bejibun-Framework/bejibun-cache/compare/v0.1.12...v0.1.14) - 2025-12-12
 
 ### 🩹 Fixes
-- Redis connection with Cache own configuration - [#1](https://github.com/crenata/bejibun-core/issues/1)
+- Redis connection with Cache own configuration - [#1](https://github.com/Bejibun-Framework/bejibun-core/issues/1)
 
 ### 📖 Changes
 What's New :
@@ -81,11 +81,11 @@ If so, the data is returned. Otherwise, the cache file will be deleted and retur
 ### ❤️Contributors
 - Havea Crenata ([@crenata](https://github.com/crenata))
 
-**Full Changelog**: https://github.com/crenata/bejibun-cache/blob/master/CHANGELOG.md
+**Full Changelog**: https://github.com/Bejibun-Framework/bejibun-cache/blob/master/CHANGELOG.md
 
 ---
 
-## [v0.1.12](https://github.com/crenata/bejibun-cache/compare/v0.1.11...v0.1.12) - 2025-12-04
+## [v0.1.12](https://github.com/Bejibun-Framework/bejibun-cache/compare/v0.1.11...v0.1.12) - 2025-12-04
 
 ### 🩹 Fixes
 
@@ -93,16 +93,16 @@ If so, the data is returned. Otherwise, the cache file will be deleted and retur
 What's New :
 - Adding `local` connection for file schema
 
-Now, [@bejibun/cache](https://github.com/crenata/bejibun-cache) has local and redis for cache system.
+Now, [@bejibun/cache](https://github.com/Bejibun-Framework/bejibun-cache) has local and redis for cache system.
 
 ### ❤️Contributors
 - Havea Crenata ([@crenata](https://github.com/crenata))
 
-**Full Changelog**: https://github.com/crenata/bejibun-cache/blob/master/CHANGELOG.md
+**Full Changelog**: https://github.com/Bejibun-Framework/bejibun-cache/blob/master/CHANGELOG.md
 
 ---
 
-## [v0.1.11](https://github.com/crenata/bejibun-cache/compare/v0.1.0...v0.1.11) - 2025-11-23
+## [v0.1.11](https://github.com/Bejibun-Framework/bejibun-cache/compare/v0.1.0...v0.1.11) - 2025-11-23
 
 ### 🩹 Fixes
 
@@ -113,11 +113,11 @@ What's New :
 ### ❤️Contributors
 - Havea Crenata ([@crenata](https://github.com/crenata))
 
-**Full Changelog**: https://github.com/crenata/bejibun-cache/blob/master/CHANGELOG.md
+**Full Changelog**: https://github.com/Bejibun-Framework/bejibun-cache/blob/master/CHANGELOG.md
 
 ---
 
-## [v0.1.1](https://github.com/crenata/bejibun-cache/compare/v0.1.0...v0.1.1) - 2025-11-23
+## [v0.1.1](https://github.com/Bejibun-Framework/bejibun-cache/compare/v0.1.0...v0.1.1) - 2025-11-23
 
 ### 🩹 Fixes
 
@@ -130,11 +130,11 @@ What's New :
 ### ❤️Contributors
 - Ghulje ([@ghulje](https://github.com/ghulje))
 
-**Full Changelog**: https://github.com/crenata/bejibun-cache/blob/master/CHANGELOG.md
+**Full Changelog**: https://github.com/Bejibun-Framework/bejibun-cache/blob/master/CHANGELOG.md
 
 ---
 
-## [v0.1.0](https://github.com/crenata/bejibun-cache/compare/v0.1.0...v0.1.0) - 2025-11-09
+## [v0.1.0](https://github.com/Bejibun-Framework/bejibun-cache/compare/v0.1.0...v0.1.0) - 2025-11-09
 
 ### 🩹 Fixes
 
@@ -152,4 +152,4 @@ Cache with Redis, currently only redis.
 ### ❤️Contributors
 - Havea Crenata ([@crenata](https://github.com/crenata))
 
-**Full Changelog**: https://github.com/crenata/bejibun-cache/blob/master/CHANGELOG.md
+**Full Changelog**: https://github.com/Bejibun-Framework/bejibun-cache/blob/master/CHANGELOG.md
